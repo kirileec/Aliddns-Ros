@@ -26,6 +26,7 @@ jobs:
 
     - name: GitHub Releases
       uses: fnkr/github-action-ghr@v1.3
+      if: startsWith(github.ref, 'refs/heads/')
       env:
         GHR_COMPRESS: xz
         GHR_PATH: build/
