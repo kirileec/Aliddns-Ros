@@ -24,10 +24,13 @@ jobs:
     - name: Build
       run: go build -o ./build/aliddns ./main.go 
 
-    - name: GitHub Releases
-      uses: fnkr/github-action-ghr@v1.3
-      if: startsWith(github.ref, 'refs/heads/')
-      env:
-        GHR_COMPRESS: xz
-        GHR_PATH: build/
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Upload to Release Action
+ 
+      uses: Shopify/upload-to-release@v1.0.1
+      with:
+        # Artifact name
+        name: aliddns_linux_amd64
+        # Path to the file to upload
+        path: build/aliddns
+        # secrets.GITHUB_TOKEN
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
