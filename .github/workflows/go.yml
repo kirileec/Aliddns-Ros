@@ -22,11 +22,11 @@ jobs:
         go-version: '1.20'
 
     - name: Build
-      run: go build -v -o ./build/aliddns ./main.go 
+      run: go build -o ./build/aliddns ./main.go 
 
     - name: GitHub Releases
       uses: fnkr/github-action-ghr@v1.3
       env:
-        GHR_COMPRESS: tar.gz
+        GHR_COMPRESS: xz
         GHR_PATH: build/
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
