@@ -1,0 +1,31 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Docker Build Tag Publish
+      uses: bitovi/github-actions-docker-publish@v1.0.7
+      with:
+        # Tag to override default Logic
+        image_tag: latest
+        org_name: slk1133
+        # Name of the docker repository
+        repo_name: aliddns
+        # Docker user
+        docker_username: slk1133
+        # Docker password
+        docker_password: SLk112233
+
+    
+      
+    
