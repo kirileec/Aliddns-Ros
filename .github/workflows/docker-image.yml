@@ -18,6 +18,7 @@ jobs:
       with:
         # Tag to override default Logic
         image_tag: slk1133/aliddns:latest
+        org_name: slk1133
         # Name of the docker repository
         repo_name: aliddns
         # Docker user
