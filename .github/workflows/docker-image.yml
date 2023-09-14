@@ -17,7 +17,7 @@ jobs:
       uses: bitovi/github-actions-docker-publish@v1.0.7
       with:
         # Tag to override default Logic
-        image_tag: slk1133/aliddns:latest
+        image_tag: latest
         org_name: slk1133
         # Name of the docker repository
         repo_name: aliddns
