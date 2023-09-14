@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 	"net/http"
+	"strings"
 )
 
 func init() {
@@ -22,15 +23,11 @@ type ConfigInfo struct {
 }
 
 func main() {
-	// 同时将日志写入文件和控制台
-	//f, _ := os.Create("Aliddns_Get.log")
-	//gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
-
-	//gin.SetMode(gin.ReleaseMode)
-	//gin.DisableConsoleColor()
-
 	r := gin.Default()
 	r.Use(middlewares.Logger())
+	r.GET("/", func(context *gin.Context) {
+		context.Writer.WriteString("/aliddns?AccessKeyID=&AccessKeySecret=&DomainName=&RR=&IpAddr=&rt=6")
+	})
 	r.GET("/aliddns", AddUpdateAliddns)
 	r.Run(":8800")
 }
@@ -44,9 +41,14 @@ func AddUpdateAliddns(c *gin.Context) {
 	conf.DomainName = c.Query("DomainName")
 	conf.RR = c.Query("RR")
 	conf.IpAddr = c.Query("IpAddr")
+	var rt = c.Query("rt")
 
-	//Info.Print("当前路由公网IP：" + conf.IpAddr)
-	//log.SetOutput()
+	if conf.RR == "" {
+		var i = strings.Index(conf.DomainName, ".")
+		conf.RR = conf.DomainName[:i]
+		conf.DomainName = conf.DomainName[i+1:]
+	}
+
 	log.Println("当前路由公网IP：" + conf.IpAddr)
 	log.Println("进行阿里云登录……")
 
@@ -82,7 +84,12 @@ func AddUpdateAliddns(c *gin.Context) {
 		updateRecord.RecordId = exsitRecordID
 		updateRecord.RR = conf.RR
 		updateRecord.Value = conf.IpAddr
-		updateRecord.Type = dns.ARecord
+		if rt == "6" {
+			updateRecord.Type = dns.AAAARecord
+		} else {
+			updateRecord.Type = dns.ARecord
+		}
+
 		rsp := new(dns.UpdateDomainRecordResponse)
 		rsp, err := client.UpdateDomainRecord(updateRecord)
 		if nil != err {
@@ -98,7 +105,13 @@ func AddUpdateAliddns(c *gin.Context) {
 		newRecord.DomainName = conf.DomainName
 		newRecord.RR = conf.RR
 		newRecord.Value = conf.IpAddr
-		newRecord.Type = dns.ARecord
+
+		if rt == "6" {
+			newRecord.Type = dns.AAAARecord
+		} else {
+			newRecord.Type = dns.ARecord
+		}
+
 		rsp := new(dns.AddDomainRecordResponse)
 		rsp, err = client.AddDomainRecord(newRecord)
 		if nil != err {
