@@ -59,7 +59,7 @@ func SynologyBridge(c *gin.Context) {
 		title := c.PostForm("title")
 		group := c.PostForm("group")
 		category := c.PostForm("category")
-		text = strings.ReplaceAll(text, `\n`, "%0a")
+		text = strings.ReplaceAll(text, "\n", "\\n")
 		log.Println("text: ", text)
 		log.Println("device_key: ", deviceKey)
 		log.Println("title: ", title)
