@@ -10,6 +10,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"strings"
 	"time"
 )
@@ -59,7 +60,7 @@ func SynologyBridge(c *gin.Context) {
 		title := c.PostForm("title")
 		group := c.PostForm("group")
 		category := c.PostForm("category")
-
+		text = url.QueryEscape(text)
 		log.Println("text: ", text)
 		log.Println("device_key: ", deviceKey)
 		log.Println("title: ", title)
