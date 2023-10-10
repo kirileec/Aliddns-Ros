@@ -25,14 +25,27 @@ type ConfigInfo struct {
 	IpAddr          string
 }
 
+var (
+	USAGE = `
+详细参考 https://github.com/kirileec/Aliddns-Ros
+
+1. 调用aliyun ddns更新dns记录. 
+GET /aliddns?AccessKeyID=&AccessKeySecret=&DomainName=&RR=&IpAddr=&rt=6
+
+2. 推送bark消息
+POST /synobridge/bark
+text=
+device_key=
+group=
+category=
+`
+)
+
 func main() {
 	r := gin.Default()
 	r.Use(middlewares.Logger())
 	r.GET("/", func(context *gin.Context) {
-		context.Writer.WriteString("GET /aliddns?AccessKeyID=&AccessKeySecret=&DomainName=&RR=&IpAddr=&rt=6")
-		context.Writer.WriteString("\n")
-		context.Writer.WriteString("POST /synobridge")
-
+		context.Writer.WriteString(USAGE)
 	})
 	r.GET("/aliddns", AddUpdateAliddns)
 	r.POST("/synobridge/:sendtype", SynologyBridge)

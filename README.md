@@ -132,6 +132,7 @@ http://服务地址:8800/aliddns?AccessKeyID=阿里云KEY&AccessKeySecret=阿里
 
 # 三、其它方式
 请求方法：`GET`
+
 请求地址：
 ```
 http://服务地址:8800/aliddns?AccessKeyID=XXXXXX&AccessKeySecret=XXXXXX&RR=XX&DomainName=XXX&IpAddr=XXX&rt=4
@@ -146,3 +147,23 @@ http://服务地址:8800/aliddns?AccessKeyID=XXXXXX&AccessKeySecret=XXXXXX&RR=XX
 - IpAddr: 要更新的DNS记录地址
 - rt: 4/6 表示是IPv4记录或者IPv6记录
 
+# 四、推送bark消息
+
+请求方法：`POST`
+
+请求地址：
+```
+http://服务地址:8800/synobridge/bark
+```
+
+## 参数说明
+
+multipart/form-data
+
+| 参数         | 类型   | 描述         | 必选 |   |
+|------------|------|------------|----|---|
+| text       | form | 消息内容       | √  |   |
+| title      | form | 标题         |    |   |
+| device_key | form | 设备bark的key | √  |   |
+| group      | form | 分组         |    |   |
+| category   | form | 分类         |    |   |
