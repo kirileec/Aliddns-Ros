@@ -54,11 +54,18 @@ func SynologyBridge(c *gin.Context) {
 	var sendtype = c.Param("sendtype")
 	switch sendtype {
 	case "bark":
-		text := c.Query("text")
-		deviceKey := c.Query("device_key")
-		title := c.Query("title")
-		group := c.Query("group")
-		category := c.Query("category")
+		text := c.PostForm("text")
+		deviceKey := c.PostForm("device_key")
+		title := c.PostForm("title")
+		group := c.PostForm("group")
+		category := c.PostForm("category")
+
+		log.Println("text: ", text)
+		log.Println("device_key: ", deviceKey)
+		log.Println("title: ", title)
+		log.Println("group: ", group)
+		log.Println("category: ", category)
+
 		if text != "" && deviceKey != "" {
 			json := []byte(fmt.Sprintf(`{"body": "%s","device_key": "%s","title": "%s", "group": "%s","category": "%s"}`, text, deviceKey, title, group, category))
 			body := bytes.NewBuffer(json)
