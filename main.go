@@ -3,6 +3,7 @@ package main
 import (
 	middlewares "Aliddns-Ros/log-handler"
 	"bytes"
+	"crypto/tls"
 	"fmt"
 	"github.com/denverdino/aliyungo/dns"
 	"github.com/gin-gonic/gin"
@@ -10,6 +11,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
+	"time"
 )
 
 func init() {
@@ -66,12 +68,18 @@ func SynologyBridge(c *gin.Context) {
 			body := bytes.NewBuffer(json)
 
 			// Create client
-			client := &http.Client{}
+			client := &http.Client{
+				Timeout: 10 * time.Second,
+				Transport: &http.Transport{
+					TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+				},
+			}
 
 			// Create request
 			req, err := http.NewRequest("POST", "https://api.day.app/push", body)
 			if err != nil {
 				log.Println("Failure : ", err)
+				return
 			}
 
 			// Headers
@@ -82,6 +90,7 @@ func SynologyBridge(c *gin.Context) {
 
 			if err != nil {
 				log.Println("Failure : ", err)
+				return
 			}
 
 			// Read Response Body
