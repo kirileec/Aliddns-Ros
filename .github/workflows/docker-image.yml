@@ -24,7 +24,7 @@ jobs:
         # Docker user
         docker_username: slk1133
         # Docker password
-        docker_password: SLk112233
+        docker_password: ${{ secrets.DOCKER_PASSWORD }}
 
     
       
