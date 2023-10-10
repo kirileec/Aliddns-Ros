@@ -2,9 +2,12 @@ package main
 
 import (
 	middlewares "Aliddns-Ros/log-handler"
+	"bytes"
+	"fmt"
 	"github.com/denverdino/aliyungo/dns"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
+	"io/ioutil"
 	"net/http"
 	"strings"
 )
@@ -26,10 +29,59 @@ func main() {
 	r := gin.Default()
 	r.Use(middlewares.Logger())
 	r.GET("/", func(context *gin.Context) {
-		context.Writer.WriteString("/aliddns?AccessKeyID=&AccessKeySecret=&DomainName=&RR=&IpAddr=&rt=6")
+		context.Writer.WriteString("GET /aliddns?AccessKeyID=&AccessKeySecret=&DomainName=&RR=&IpAddr=&rt=6")
+		context.Writer.WriteString("\n")
+		context.Writer.WriteString("POST /synobridge")
+
 	})
 	r.GET("/aliddns", AddUpdateAliddns)
+	r.POST("/synobridge/:sendtype", SynologyBridge)
 	r.Run(":8800")
+}
+
+func SynologyBridge(c *gin.Context) {
+	var sendtype = c.Param("sendtype")
+	switch sendtype {
+	case "bark":
+		text := c.DefaultPostForm("text", "")
+		deviceKey := c.DefaultPostForm("device_key", "")
+		title := c.DefaultPostForm("title", "通知")
+		group := c.DefaultPostForm("group", "")
+		category := c.DefaultPostForm("category", "")
+		if text != "" && deviceKey != "" {
+			json := []byte(fmt.Sprintf(`{"body": "%s","device_key": "%s","title": "%s", "group": "%s","category": "%s"}`, text, deviceKey, title, group, category))
+			body := bytes.NewBuffer(json)
+
+			// Create client
+			client := &http.Client{}
+
+			// Create request
+			req, err := http.NewRequest("POST", "https://api.day.app/push", body)
+			if err != nil {
+				log.Println("Failure : ", err)
+			}
+
+			// Headers
+			req.Header.Add("Content-Type", "application/json; charset=utf-8")
+
+			// Fetch Request
+			resp, err := client.Do(req)
+
+			if err != nil {
+				log.Println("Failure : ", err)
+			}
+
+			// Read Response Body
+			respBody, _ := ioutil.ReadAll(resp.Body)
+
+			// Display Results
+			log.Println("response Status : ", resp.Status)
+			log.Println("response Headers : ", resp.Header)
+			log.Println("response Body : ", string(respBody))
+		}
+
+	}
+
 }
 
 func AddUpdateAliddns(c *gin.Context) {
