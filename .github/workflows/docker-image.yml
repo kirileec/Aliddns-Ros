@@ -26,6 +26,16 @@ jobs:
         # Docker password
         docker_password: ${{ secrets.DOCKER_PASSWORD }}
 
-    
+    - name: Bark Notification
+      uses: lxzxl/bark-action@2.0.0
+      with:
+        # Secret key
+        key: cPbP4L263a7mJJyvMZXpXR
+        title: 项目Action
+        # Message body
+        body: aliddns-ros构建推送完毕
+        # URL to redirect
+        url: https://hub.docker.com/r/slk1133/aliddns
+
       
     
