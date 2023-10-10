@@ -35,11 +35,7 @@ var (
 GET /aliddns?AccessKeyID=&AccessKeySecret=&DomainName=&RR=&IpAddr=&rt=6
 
 2. 推送bark消息
-POST /synobridge/bark
-text=
-device_key=
-group=
-category=
+POST /synobridge/bark?text=&device_key=&group=&category=
 `
 )
 
@@ -58,11 +54,11 @@ func SynologyBridge(c *gin.Context) {
 	var sendtype = c.Param("sendtype")
 	switch sendtype {
 	case "bark":
-		text := c.DefaultPostForm("text", "")
-		deviceKey := c.DefaultPostForm("device_key", "")
-		title := c.DefaultPostForm("title", "通知")
-		group := c.DefaultPostForm("group", "")
-		category := c.DefaultPostForm("category", "")
+		text := c.Query("text")
+		deviceKey := c.Query("device_key")
+		title := c.Query("title")
+		group := c.Query("group")
+		category := c.Query("category")
 		if text != "" && deviceKey != "" {
 			json := []byte(fmt.Sprintf(`{"body": "%s","device_key": "%s","title": "%s", "group": "%s","category": "%s"}`, text, deviceKey, title, group, category))
 			body := bytes.NewBuffer(json)

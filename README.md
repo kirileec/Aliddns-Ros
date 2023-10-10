@@ -153,17 +153,5 @@ http://服务地址:8800/aliddns?AccessKeyID=XXXXXX&AccessKeySecret=XXXXXX&RR=XX
 
 请求地址：
 ```
-http://服务地址:8800/synobridge/bark
+http://服务地址:8800/synobridge/bark?text=&title=&device_key=&group=&category=
 ```
-
-## 参数说明
-
-multipart/form-data
-
-| 参数         | 类型   | 描述         | 必选 |   |
-|------------|------|------------|----|---|
-| text       | form | 消息内容       | √  |   |
-| title      | form | 标题         |    |   |
-| device_key | form | 设备bark的key | √  |   |
-| group      | form | 分组         |    |   |
-| category   | form | 分类         |    |   |
