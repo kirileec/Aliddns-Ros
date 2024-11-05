@@ -1,5 +1,5 @@
 # 构建：使用golang:1.14版本
-FROM golang:1.19.3 as build
+FROM golang:latest as build
 
 # 容器环境变量添加
 ENV GO111MODULE=on
