@@ -1,6 +1,7 @@
 # 构建：使用golang:1.14版本
-FROM golang:latest as build
+FROM golang:alpine as build
 
+RUN apk add -U --no-cache ca-certificates
 # 容器环境变量添加
 ENV GO111MODULE=on
 ENV GOPROXY=https://goproxy.cn,direct
@@ -16,7 +17,7 @@ RUN GOOS=linux CGO_ENABLED=0 GOARCH=amd64 go build -ldflags="-s -w" -installsuff
 
 # 运行: 使用scratch作为基础镜像
 FROM scratch as prod
-
+COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 # 在build阶段, 复制时区配置到镜像的/etc/localtime
 COPY --from=build /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
