@@ -155,3 +155,14 @@ http://服务地址:8800/aliddns?AccessKeyID=XXXXXX&AccessKeySecret=XXXXXX&RR=XX
 ```
 http://服务地址:8800/synobridge/bark?text=&title=&device_key=&group=&category=
 ```
+或者以form参数传递
+
+# 五、推送telegram消息
+
+请求方法：`POST`
+
+请求地址：
+```
+http://服务地址:8800/synobridge/tg?text=&title=&chat_id=&token=
+```
+或者以form参数传递

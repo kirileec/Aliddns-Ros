@@ -7,16 +7,14 @@ import (
 	"fmt"
 	"github.com/denverdino/aliyungo/dns"
 	"github.com/gin-gonic/gin"
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/linxlib/conv"
 	log "github.com/sirupsen/logrus"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 	"time"
 )
-
-func init() {
-
-}
 
 // ConfigInfo 定义域名相关配置信息
 type ConfigInfo struct {
@@ -36,6 +34,13 @@ GET /aliddns?AccessKeyID=&AccessKeySecret=&DomainName=&RR=&IpAddr=&rt=6
 
 2. 推送bark消息
 POST /synobridge/bark?text=&device_key=&group=&category=
+
+或者form参数传递
+
+3. 推送telegram信息
+POST /synobridge/tg?text=&title=&chat_id=&token=
+
+或者form参数传递
 `
 )
 
@@ -55,10 +60,25 @@ func SynologyBridge(c *gin.Context) {
 	switch sendtype {
 	case "bark":
 		text := c.PostForm("text")
+		if strings.TrimSpace(text) == "" {
+			text = c.Query("text")
+		}
 		deviceKey := c.PostForm("device_key")
+		if strings.TrimSpace(deviceKey) == "" {
+			deviceKey = c.Query("device_key")
+		}
 		title := c.PostForm("title")
+		if strings.TrimSpace(title) == "" {
+			title = c.Query("title")
+		}
 		group := c.PostForm("group")
+		if strings.TrimSpace(group) == "" {
+			group = c.Query("group")
+		}
 		category := c.PostForm("category")
+		if strings.TrimSpace(category) == "" {
+			category = c.Query("category")
+		}
 		text = strings.ReplaceAll(text, "\n", "\\n")
 		log.Println("text: ", text)
 		log.Println("device_key: ", deviceKey)
@@ -97,14 +117,53 @@ func SynologyBridge(c *gin.Context) {
 			}
 
 			// Read Response Body
-			respBody, _ := ioutil.ReadAll(resp.Body)
+			respBody, _ := io.ReadAll(resp.Body)
 
 			// Display Results
 			log.Println("response Status : ", resp.Status)
 			log.Println("response Headers : ", resp.Header)
 			log.Println("response Body : ", string(respBody))
 		}
+	case "tg":
+		text := c.PostForm("text")
+		if strings.TrimSpace(text) == "" {
+			text = c.Query("text")
+		}
+		chat_id := c.PostForm("chat_id")
+		if strings.TrimSpace(chat_id) == "" {
+			chat_id = c.Query("chat_id")
+		}
+		title := c.PostForm("title")
+		if strings.TrimSpace(title) == "" {
+			title = c.Query("title")
+		}
+		token := c.PostForm("token")
+		if strings.TrimSpace(token) == "" {
+			token = c.Query("token")
+		}
 
+		//category := c.PostForm("category")
+		text = strings.ReplaceAll(text, "\n", "\\n")
+		log.Println("text: ", text)
+		log.Println("chat_id: ", chat_id)
+		log.Println("title: ", title)
+		log.Println("token: ", token)
+		//log.Println("category: ", category)
+
+		bot, err := tgbotapi.NewBotAPI(token)
+		if err != nil {
+			log.Println(err)
+			break
+		}
+
+		msg := tgbotapi.NewMessage(conv.Int64(chat_id), "*"+title+"*\n----------\n"+text)
+		msg.ParseMode = "Markdown"
+		m, err := bot.Send(msg)
+		if err != nil {
+			log.Println("Failure : ", err)
+			break
+		}
+		log.Println(m.Text)
 	}
 
 }
