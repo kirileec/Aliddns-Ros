@@ -26,18 +26,6 @@ jobs:
         # Docker password
         docker_password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Bark Action
-      # You may pin to the exact commit or the version.
-      # uses: shink/bark-action@0691394578784b4fd7dcb08762e057b20ec44d85
-      uses: shink/bark-action@v2
-      with:
-        # Secret key
-        key: cPbP4L263a7mJJyvMZXpXR
-
-        # Message title
-        title: 项目构建
-        # Message body
-        body: Aliddns-Ros构建完成
 
 
       

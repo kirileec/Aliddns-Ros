@@ -1,9 +1,9 @@
 module Aliddns-Ros
 
-go 1.19
+go 1.20
 
 require (
-	github.com/denverdino/aliyungo v0.0.0-20220929054937-e3c8bf5ad947
+	github.com/denverdino/aliyungo v0.0.0-20230411124812-ab98a9173ace
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.5.1
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
