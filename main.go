@@ -155,7 +155,7 @@ func SynologyBridge(c *gin.Context) {
 			log.Println(err)
 			break
 		}
-
+		bot.SetAPIEndpoint("https://tgbot.202816.xyz/bot%s/%s")
 		msg := tgbotapi.NewMessage(conv.Int64(chat_id), "*"+title+"*\n----------\n"+text)
 		msg.ParseMode = "Markdown"
 		m, err := bot.Send(msg)
