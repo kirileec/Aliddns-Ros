@@ -1,7 +1,7 @@
 
 FROM golang:alpine AS build
 
-RUN apk --no-cache add ca-certificates tzdata
+RUN apk --no-cache add tzdata
 
 # 设置当前工作区
 WORKDIR /app
