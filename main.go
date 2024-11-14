@@ -45,6 +45,13 @@ POST /synobridge/tg?text=&title=&chat_id=&token=
 )
 
 func main() {
+	fmt.Println("testing gstatic.com 204 status code")
+	resp, err := http.Get("http://www.gstatic.com/generate_204")
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println(resp.StatusCode, resp.Status)
+	}
 	r := gin.Default()
 	r.Use(middlewares.Logger())
 	r.GET("/", func(context *gin.Context) {
