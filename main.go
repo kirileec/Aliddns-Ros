@@ -52,6 +52,13 @@ func main() {
 	} else {
 		fmt.Println(resp.StatusCode, resp.Status)
 	}
+	fmt.Println("testing api.telegram.org 302 status code")
+	resp1, err1 := http.Get("https://api.telegram.org")
+	if err1 != nil {
+		fmt.Println(err1)
+	} else {
+		fmt.Println(resp1.StatusCode, resp1.Status)
+	}
 	r := gin.Default()
 	r.Use(middlewares.Logger())
 	r.GET("/", func(context *gin.Context) {
