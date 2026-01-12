@@ -15,7 +15,7 @@ docker compose
 ```yaml
 services:
   aliddns-ros:
-    image: ghcr.io/kirileec/aliddnsv2:latest
+    image: ghcr.io/kirileec/aliddns-ros:latest
     # image: slk1133/aliddnsv2:latest
     container_name: aliddns-ros
     restart: always
