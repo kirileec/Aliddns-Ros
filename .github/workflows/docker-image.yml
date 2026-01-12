@@ -2,9 +2,9 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "v2" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "v2" ]
 
 jobs:
 
@@ -20,7 +20,7 @@ jobs:
         image_tag: latest
         org_name: slk1133
         # Name of the docker repository
-        repo_name: aliddns
+        repo_name: aliddnsv2
         # Docker user
         docker_username: slk1133
         # Docker password
