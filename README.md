@@ -7,7 +7,7 @@
 - AK/SK 修改为环境变量配置
 - 升级使用alidns v2 SDK
 - 推送到 ghcr, docker hub保留v1版本
-- 记录域名的变更记录, 并提供接口查询
+- 使用 SQLite 持久化域名变更记录，并提供展示页面和接口查询
 
 ## Docker部署
 
@@ -23,7 +23,13 @@ services:
         ALIDNS_ACCESS_KEY_ID: "xxxx"
         ALIDNS_ACCESS_KEY_SECRET: "xxxx"
         RECORD_CHANGES: true
+    volumes:
+        - ./data:/data
 ```
+
+变更记录页面：`http://服务地址:8800/changes`
+
+数据库默认保存在 `/data/aliddns.db`。可通过 `ALIDNS_DB_PATH` 环境变量修改路径。
 
 
 
